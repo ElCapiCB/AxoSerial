@@ -38,6 +38,7 @@ namespace axo{
 		int write(unsigned char _data);
 		int write(unsigned char* _data, unsigned int _amount);
 		int get(unsigned char* _data, unsigned int _nBytes);
+		int available();
 
 		std::vector<std::string> getComms();
 	};

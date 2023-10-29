@@ -94,17 +94,30 @@ int axo::Serial::write(unsigned char _data){
 
 int axo::Serial::get(unsigned char* _data, unsigned int _nBytes){
 
-    DWORD availableBytes;
+    DWORD availableBytes = 0;
 
-    if (PeekNamedPipe(m_Handle, NULL, 0, NULL, &availableBytes, NULL) && availableBytes > 0) {
-
-        if (ReadFile(m_Handle, _data, _nBytes, NULL, NULL) == FALSE) {
+   // if (PeekNamedPipe(m_Handle, NULL, 0, NULL, &availableBytes, NULL) && availableBytes > 0) {
+    int res = ReadFile(m_Handle, _data, _nBytes, NULL, NULL);
+        if (!res) {
             std::cerr << "No fue posible leer al puerto." << std::endl;
             return 0;
         }
-    }
-    else return 1;
+    //}
+    return 1;
 
+
+}
+
+int axo::Serial::available()
+{
+
+    COMSTAT status;
+    int stat = ClearCommError(m_Handle, NULL, &status);
+    if (stat) {
+        return status.cbInQue > 0;
+    }
+
+    return false;
 
 }
 

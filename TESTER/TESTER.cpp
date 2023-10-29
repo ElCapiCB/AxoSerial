@@ -32,15 +32,22 @@ int main(){
 
     a.init(axo::CharToLPCWSTR(comms[selection].c_str()));
 
-    unsigned char buff[2];
+    unsigned char buff[3] = { 0 };
     float val = 0;
 
+    unsigned char code = 0;
+    std::cout << "code: ";
+    std::cin >> code;
+    std::cout << std::endl;
+
     while (1) {
+        a.write(code);
 
-        a.write('R');
-        a.get(buff, 2);
+        if (a.available()) {
+            a.get(buff, 2);
+        }
 
-        val = (float(buff[0] << 8 || buff[1])) * 5.0 / 1024.0;
+        val = (float(buff[0] << 8 | buff[1])) * 5.0 / 1023.0;
         std::cout << val << std::endl;
 
         Sleep(100);
